@@ -61,7 +61,7 @@
 
 void printArray(int arr[], int count) {
 	for (int i; i < count; i++) {
-		prihtf("%d ", arr[i]);
+		printf("%d ", arr[i]);
 	}
 	printf("\n");
 }
