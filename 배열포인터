@@ -1,0 +1,49 @@
+//배열 포인터
+//배열 포인터(a pointer to an array)는 배열을 가리키는 포인터
+//int(*pa)[10];
+	//(*pa) : 괄호가 있으므로 pa는 먼저 포인터가 된다.
+	//int(*pa)[10]; : 어떤 포인텨냐 하면 int[10]을 가리키는 포인터가 된다.
+//#include <stdio.h>
+//int main() {
+//	int a[5] = { 1,2,3,4,5 };
+//	int(*pa)[5]; //배열포인터
+//	int *p;
+//	int i;
+//
+//	pa = a;
+//	p = a;
+//	for (i = 0; i < 5; i++) {
+//		printf("%d \n", (*pa)[i]);
+//		printf("%d \n", *p + i);
+//	}
+//	return 0;
+//}
+
+//이중 포인터(double pointer) : 포인터를 가리키는 포인터
+#include <stdio.h>
+int main() {
+	int i = 100; //i는 int형 변수
+	int* p = &i; //p는 i를 가리키는 포인터
+	int* q = &p; //q는 p를 가리키는 이중포인터
+
+	*p = 200;
+	printf("i=%d\n", i);
+
+	*q = 300;
+	printf("p=%d\n", p);
+
+	return 0;
+}
+
+#include <stdio.h>
+void set_pointer(char **q);
+int main() {
+	char* p; //주소값 저장하는 포인터 변수, (주소값을 저장할 수 있는 변수 = 포인터 변수)
+	set_pointer(&p);
+	printf("오늘의 격언 : %s \n", p);
+	return 0;
+}
+void set_pointer(char **q) //포인터 p의 값을 함수에서 변경하려면 주소를 보내야 한다.
+{
+	*q = "All that glisters is not gold.";
+}
