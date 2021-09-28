@@ -1,0 +1,174 @@
+//함수 포인터
+//함수 포인터(function pointer) : 함수를 가리키는 포인터
+//함수 포인터 정의
+//int(*pf)(int, int);
+//	(1)(2)		(3)
+//(1) *pf : 함수를 가리키는 포인터를 선언한다.
+//(2)() : 반드시 괄호가 필요하다. 왜냐면 괄호에 의해서 pf가 먼저 포인터가 되어야 한다.
+//(3) int(*pf)(int, int) : 포인터가 가리키는 함수의 매개변수
+//#include <stdio.h>
+//int add(int, int); //함수 원형 정의
+//int sub(int, int);
+//int main() {
+//	int result;
+//	int(*pf)(int, int); //함수 포인터 정의
+//
+//	pf = add; //함수 포인터에 함수 add()의 주소 대입
+//	result = pf(10, 20); //함수 포인터를 통한 함수 sub()호출
+//	printf("10-20은 %d\n", result);
+//
+//	return 0;
+//}
+//int add(int x, int y) { return x + y; }
+//int sub(int x, int y) { return x - y; }
+
+//함수 포인터 배열
+//int(*pf[5])(int, int);
+//[5] : []연산자가 *연산자보다 우선순위가 높으므로 pf는 먼저 배열이 된다.
+//(*pf[5]) : 어떤 배열이냐 하면 포인터들의 배열이 된다.
+//int(*pf[5])(int, int); : 어떤 포인터냐 하면 함수를 가리키는 포인터가 된다.
+//#include <stdio.h>
+//#pragma warning(disable : 4996)
+//void menu(void); //함수 원형 정의
+//int add(int x, int y);
+//int sub(int x, int y);
+//int mul(int x, int y);
+//int div(int x, int y);
+//void menu(void) {
+//	printf("=====================\n");
+//	printf("0. 덧셈\n");
+//	printf("1. 뺄셈\n");
+//	printf("2. 곱셈\n");
+//	printf("3. 나눗셈\n");
+//	printf("4. 종료\n");
+//	printf("\n\n=====================\n");
+//}
+//int main() {
+//	int choice, result, x, y;
+//	//함수 포인터 배열을 선언하고 초기화한다.
+//	int(*pf[4])(int, int) = { add, sub, mul, div };
+//
+//	while (1) {
+//		menu();
+//		printf("메뉴를 선택하시오: ");
+//		scanf("%d", &choice);
+//
+//		if (choice < 0 || choice >= 4)
+//			break;
+//		printf("2개의 정수를 입력하시오: ");
+//		scanf("%d %d", &x, &y);
+//
+//		result = pf[choice](x, y); //함수 포인터를 이용한 함수 호출
+//		printf("연산 결과 = %d\n", result);
+//	}
+//	return 0;
+//}
+//int add(int x, int y) { return x + y; }
+//int sub(int x, int y) { return x - y; }
+//int mul(int x, int y) { return x * y; }
+//int div(int x, int y) { return x / y; }
+
+//typedef : 자료형재정의
+//#include <stdio.h>
+//struct MyStruct {
+//	int x;
+//	int y;
+//}MS;
+//int main() {
+//	struct MyStruct MY;
+//	MS MY2;
+//	MY.x = 10;
+//	MY.y = 20;
+//}
+
+//typedef unsigned char BYTE;
+//BYTE A; //unsigned char A; 선언한 것과 동일
+
+//typedef double element;
+
+//element a;
+//element b;
+
+//typedef과 #define 비교
+//1. 이식성을 높여준다.
+//코드를 컴퓨터 하드웨어에 독립적으로 만들 수 있다.
+//(예) int형은 2바이트이기도 하고 4바이트, int형 대신에 typedef을 이용한
+//INT32나 INT16을 사용하게 되면 확실하게 2바이트인지 4바이트인지를 지정할 수 있다.
+
+//2. #define을 이용해도 typedef과 비슷한 효과를 낼 수 있다.
+//즉 다음과 같이 INT32를 정의할 수 있다.
+//#define UINT32 unsigned int
+//typedef float VECTOR[2]; //#define으로는 불가능하다.
+
+//3. 문서화 역할도 한다.
+//typedef을 사용하게 되면 주석을 붙이는 것과 같은 효과
+//#include <stdio.h>
+//typedef struct point {
+//	int x;
+//	int y;
+//}POINT;
+//POINT translate(POINT p, POINT delta); //프로토타입
+//int main() {
+//	POINT p = { 2,3 };
+//	POINT delta = { 10,10 };
+//	POINT result;
+//	result = translate(p, delta);
+//	printf("새로운 점의 좌표는(%d, %d)입니다.\n", result.x, result.y);
+//	return 0;
+//}
+//POINT translate(POINT p, POINT delta) {
+//	POINT new_p;
+//	new_p.x = p.x + delta.x;
+//	new_p.y = p.y + delta.y;
+//	return new_p;
+//}
+
+
+//->연산자
+//(*p).number
+//	(*p) : p가 가르키는 구조체의 변수
+//	(*p).number : p가 가르키는 구조체 변수의 멤버 number
+//p->number : p가 가리키는 구조체 변수의 멤버 number
+//#include <stdio.h>
+//struct student {
+//	int number;
+//	char name[20];
+//	double grade;
+//};
+//int main() {
+//	struct student s = { 20070001, "홍길동", 4.3 };
+//	struct student* p;
+//	p = &s;
+//	printf("학번=%d 이름=%s 학점=%f \n", s.number, s.name, s.grade);
+//	printf("학번=%d 이름=%s 학점=%f \n", (*p).number, (*p).name, (*p).grade);
+//	printf("학번=%d 이름=%s 학점=%f \n", p->number, p->name, p->grade);
+//	return 0;
+//}
+//-> 연산자는 구조체 포인터로 구조체 멤버를 참조할 때 사용한다.
+
+
+//포인터를 멤버로 가지는 구조체
+struct data {
+	int month;
+	int day;
+	int year;
+};
+struct student {
+	int number;
+	char name[20];
+	double grade;
+	struct data* dob;
+};
+int main() {
+	struct data d = { 3,20,1980 };
+	struct student s = { 2019001, "Kim", 4.3 };
+
+	s.dob = &d;
+
+	printf("학번 : %d\n", s.number);
+	printf("이름 : %s\n", s.name);
+	printf("학점 : %f\n", s.grade);
+	printf("생년월일 : %d년 %d월 %d일\n", s.dob->year, s.dob->month, s.dob->day);
+
+	return 0;
+}
