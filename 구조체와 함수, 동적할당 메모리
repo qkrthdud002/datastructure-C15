@@ -1,0 +1,151 @@
+//구조체와 함수
+//구조체를 함수의 인수로 전달하는 경우 : 구조체의 복사본이 함수로 전달되게 된다.
+//만약 구조체의 크기가 크면 그만큼 시간과 메모리가 소요된다.
+
+//#include <stdio.h>
+//typedef struct student {
+//	int number;
+//	char name[20];
+//	double grade;
+//}STUDENT;
+//int equal(STUDENT s1, STUDENT s2); //프로토타입
+//int main() {
+//	STUDENT a = { 1, "hong", 3.8 };
+//	STUDENT b = { 2, "kim", 4.0 };
+//	if (equal(a, b) == 1)
+//		printf("같은학생\n");
+//	else
+//		printf("다른학생\n");
+//	return 0;
+//}
+//int equal(STUDENT s1, STUDENT s2) {
+//	if (s1.number == s2.number)
+//		return 1;
+//	else 
+//		return 0;
+//}
+//return 1; 또는 return -1;은 1 또는 -1이라는 값을 반환하라는 의미.
+
+
+//구조체를 반환하는 경우
+//복사본이 반환된다.
+//백터연산 예제
+//문제 : 두 벡터의 합을 구하는 함수 get_vector_sum()를 제작하여 보자.
+//이 함수는 두개의 벡터를 인수로 받아서 덧셈을 하고 덧셈의 결과로 생성된
+//벡터를 반환한다.
+//#include <stdio.h>
+//typedef struct vector {
+//	float x;
+//	float y;
+//}VECTOR;
+//VECTOR get_vector_sum(VECTOR a, VECTOR b);
+//int main() {
+//	VECTOR a = { 2.0, 3.0 };
+//	VECTOR b = { 5.0, 6.0 };
+//	VECTOR sum;
+//
+//	sum = get_vector_sum(a, b); //구조체 result가 구조체 sum으로 복사
+//	printf("벡터의 합은 (%f, %f)입니다.\n", sum.x, sum.y);
+//
+//	return 0;
+//}
+//VECTOR get_vector_sum(VECTOR a, VECTOR b) {
+//	VECTOR result;
+//
+//	result.x = a.x + b.x;
+//	result.y = a.y + b.y;
+//
+//	return result; //구조체 result반환.
+//}
+
+
+//공용체 예제
+//#include <stdio.h>
+//union example { //공용체 선언
+//	int i;
+//	char c;
+//};
+//int main() {
+//	union example v; //공용체 변수 선언
+//	v.c = 'A'; //char형으로 참조
+//	printf("sizeof = %d\n", sizeof(union example));
+//	printf("v.c : %c	v.i : %i\n", v.c, v.i); //v.c : A		v.i : -858993599
+//	v.i = 10000; //int형으로 참조
+//	printf("v.c : %c	v.i : %i\n", v.c, v.i); //v.c : +		v.i = 10000;
+//}
+
+
+//동적할당 메모리의 개념
+//프로그램이 메모리를 할당받는 방법 2가지
+//1. 정적 메모리 할당
+//	-프로그램이 시작되기 전에 미리 정해진 크기의 메모리를 할당 받는 것
+//	-메모리 크기는 프로그램이 시작하기 전에 결정된다.
+//	-ex) int a[100];
+//	-처음 결정된 크기보다 더 큰 입력이 들어온다면 처리하지 못한다.
+//	-더 작은 입력이 들어온다면 남은 메모리 공간은 낭비된다.
+
+//2. 동적 메모리 할당
+//	-실행도중에 동적으로 메모리를 할당받는 것
+//	-사용이 끝나면 시스템이 메모리를 반납
+//	-ex) a = (int *)malloc(100 * sizeof(int));
+//	-필요한만큼만 할당을 받고 메모리를 효율적으로 사용한다.
+
+//stdlib(standard library)라는 헤더파일을 include 해야 사용할 수 있다.
+//stdlib.h 는 동적 메모리 할당 관련된 함수들을 저장하고 있다.
+//malloc(memory allocation)의 약자 : 메모리를 할당하는 함수
+//malloc 은 파라미터에 원하는 크기를 입력하면 해당하는 크기만큼의 공간을 메모리에
+//할당하고 그 시작주소를 void * 타입으로 리턴해준다.
+
+//동적메모리 할당방식
+//int *p;
+//p = (int *)malloc(100 * sizeof(int));
+//함수 원형 : void* malloc(unsigned int)
+
+//할당받은 공간 사용방법
+//1. 포인터를 통하여 사용법
+//*a = 100;
+//*(a + 1) = 200;
+
+//2. 동적메모리를 배열과 같이 취급
+//a[0] = 100;
+//a[1] = 100;
+
+//동적메모리 해제
+//free(a);
+//#include <stdio.h>
+//#include <stdlib.h>
+//int main() {
+//	int* list;
+//	list = (int*)malloc(3 * sizeof(int)); //동적메모리 할당
+//	if (list == NULL) { //반환값이 NULL인지 검사
+//		printf("동적 메모리 할당 오류\n");
+//		exit(1);
+//	}
+//	list[0] = 10; //*list = 10;
+//	list[1] = 20; //*(list + 1) = 20;
+//	list[2] = 30; //*(list + 2) = 30;
+//	free(list); //동적메모리 해제
+//	return 0;
+//}
+
+//#include <stdio.h>
+//#include <stdlib.h>
+//int main() {
+//	int* ptr;
+//	ptr = (int*)malloc(sizeof(int)); //동적메모리 할당
+//	*ptr = 1;
+//	printf("%d\n", *ptr);
+//	free(ptr); //동적메모리 해제
+//}
+
+//#include <stdio.h>
+//#include <stdlib.h>
+//int main() {
+//	int* ptr, n;
+//	printf("몇 칸의 int형 메모리를 할당하시겠습니까? __\b\b\b\b");
+//	scanf("%d", &n);
+//	ptr = (int*)malloc(sizeof(int) * n);
+//	printf("동적메모리 할당이 완료되었습니다.\n");
+//	free(ptr); //동적메모리 해제
+//	printf("동적메모리가 해제가 되었습니다.\n");
+//}
