@@ -1,0 +1,287 @@
+//예제4) 구조체를 저장할 수 있는 공간을 동적할당 받기
+//#include <stdio.h>
+//#include <stdlib.h>
+//#include <string.h>
+//struct Book {
+//	int number;
+//	char title[50];
+//};
+//int main() {
+//	struct Book* p;
+//	p = (struct Book*)malloc(2 * sizeof(struct Book)); //구조체 배열 할당
+//	if (p == NULL) {
+//		printf("메모리 할당 오류\n");
+//		exit(1);
+//	}
+//	p[0].number = 1;
+//	strcpy(p[0].title, "C Programming");
+//	p[1].number = 2;
+//	strcpy(p[1].title, "Data Structure");
+//	printf("struct Book size : %d\n", sizeof(struct Book));
+//	printf("p = %u\n", p);
+//	printf("p = %u\n", p + 1);
+//	free(p); //동적 메모리 할당 해제
+//	return 0;
+//}
+
+
+//10개의 문자열을 저장하는 동적메모리
+//#include <stdio.h>
+//#pragma warning(disable : 4996)
+//#include <stdlib.h>
+//#include <string.h>
+//
+//int main() {
+//	char* list[10];
+//	for (int i = 0; i < 10; i++) {
+//		list[i] = (char*)malloc(100 * sizeof(char));
+//		if (list[i] == NULL) {
+//			printf("malloc() 실패!\n\n");
+//			exit(1);
+//		}
+//		strcpy(list[i], "test string");
+//	}
+//	for (int i = 0; i < 10; i++) {
+//		printf("문자열 %d : %s\n", i, list[i]);
+//	}
+//	//메모리 해제
+//	for (int i = 0; i < 10; i++) {
+//		free(list);
+//	}
+//	return 0;
+//}
+
+
+//자료구조
+//리슽, 선형리스트는 우리들이 자료를 정리하는 방법 중의 하나이다.
+//리스트는 집합과 다르다. 집합간에는 각 항목간에 순서의 개념이 없으나
+//리스트에는 항목들간에 순서가 있다.
+//추상데이터타입(ADT) : 데이터와 연산에 대한 명세만을 기술하는 것이고
+//어떻게 구현되느냐는 기술하지 않는다.
+//C언어에서 기본적으로 사용하는 배열을 이용하면 가장 간단하게 리스트를 구현
+//할 수 있다. 그러나 배열을 가지고 리스트를 구현한다면 그 크기가 고정된다.
+//즉, 리스트를 배열로 구현하면 넣을 수 있는 항목의 수가 제한된다.
+//다른방법으로는 포인터를 이용하여 리스트를 만드는 방법이다.
+//연결 리스트는 필요할 때마다 중간에 노드를 추가해서 사용할 수 있다.
+//연결 리스트는 조금 복잡하긴 하지만 크기가 제한되지 않는 유연한 리스트를 구현 할 수 있다.
+
+//[배열로 구현된 리스트]
+//배열은 메모리 안에 순차적으로 공간이 할당된다고 해서 순차적 표현이라고 한다.
+//배열은 같은 형태의 변수를 여러개 만드는 경우에 사용하고, 각 공간은
+//정확히 하나의 항목만 가지고 있고, 이들 공간은 인덱스 번호를 통해서 접근 가능하다.
+//배열을 사용하여 삽입과 삭제가 발생하면 요소들을 하나씩 뒤로 이동시켜야 하고,
+//앞으로 이동시켜야 하기 때문에 상당한 오버헤드가 발생된다.
+//그러나 구현이 비교적 간단하고 효율적인것은 장점이다.
+
+//배열 list
+//배열의 갯수 length
+//저장되는 항목 element -> 타입을 int로 정의할 수 있지만, 나중에 타입을
+//변경 할 경우 전체 소스를 변경해야한다.
+//1차원 배열의 list와 length를 묶어서 구조체 타입을 arraylisttype이라고 정의한다.
+//모든 리스트 연산을 구현하는 함수에는 이 구조체의 포인터를 전달함으로써,
+//포인털르 이용해서 배열과 배열의 갯수에 접근할 수 있다.
+//이런식으로 하면 전역 변수를 사용하지 않아도 된느 큰 장점이 있다.
+//(C프로그래밍에서 오류를 줄이는 한가지 방법은 전역 변수를 사용하지 않는 것이다.
+//즉, 함수의 필요한 변수들은 되도록 매개변수를 이용하여 전달하는 것이 바람직하다.)
+
+	//#include <stdio.h>
+	//#include <stdlib.h>
+	//#include <string.h>
+	//#define MAX_LIST_SIZE
+	//
+	//typedef int element;
+	//typedef struct {
+	//	int list[MAX_LIST_SIZE]; //배열 정의
+	//	int length; //현재 배열에 저장된 항목들의 개수
+	//}ArrayListType;
+	//
+	////리스트 초기화
+	//void init(ArrayListType* L) {
+	//	L->length = 0;
+	//}
+	//
+	////리스트가 비어 있으면 1을 반환
+	////그렇지 않으면 0을 반환
+	//int is_empty(ArrayListType* L) {
+	//	return L->length == 0;
+	//}
+	//
+	////리스트가 가득 차 있으면 1을 반환
+	////그렇지 않으면 0을 반환
+	//int is_full(ArrayListType* L) {
+	//	return L->length == MAX_LIST_SIZE;
+	//}
+	//
+	////position : 삽입하고자 하는 위치
+	////item : 삽입하고자 하는 자료
+	//void add(ArrayListType* L, int position, element item) {
+	//	if (!is_full(L) && (position >= 0) && (position <= L->length)) {
+	//		int i;
+	//		for (i = (L->length - 1); i >= position; i--)
+	//			L->list[i + 1] = L->list[i];
+	//		L->list[position] = item;
+	//		L->length++;
+	//	}
+	//}
+	//
+	////position : 삭제하고자 하는 위치
+	////반환값 : 삭제되는 자료
+	//element delete(ArrayListType* L, int position) {
+	//	int i;
+	//	element item;
+	//	if (position < 0 || position >= L->length)
+	//		error("위치 오류");			//	item = L->list[position];
+	//	for (i = position; i < (L->length - 1); i++)
+	//		L->list[position];
+	//	L->list[i] = L->list[i + 1];
+	//	L->length--;
+	//	return item;
+	//}
+
+
+//자료1
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX_LIST_SIZE 100 // 배열의 최대크기
+
+typedef int element;
+typedef struct {
+	int list[MAX_LIST_SIZE];// 배열 정의
+	int length;// 현재 배열에 저장된 자료들의 개수
+} ArrayListType;
+
+// 오류 처리 함수
+void error(char* message)
+{
+	fprintf(stderr, "%s\n", message);
+	exit(1);
+}
+
+// 리스트 초기화
+void init(ArrayListType* L)
+{
+	L->length = 0;
+}
+
+// 리스트가 비어 있으면 1을 반환
+// 그렇지 않으면 0을 반환
+int is_empty(ArrayListType* L)
+{
+	return L->length == 0;
+}
+
+// 리스트가 가득 차 있으면 1을 반환
+// 그렇지 많으면 1을 반환
+int is_full(ArrayListType* L)
+{
+	return L->length == MAX_LIST_SIZE;
+}
+
+// 리스트 출력
+void display(ArrayListType* L)
+{
+	int i;
+	for (i = 0; i < L->length; i++)
+		printf("%d\n", L->list[i]);
+}
+
+//자료2
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX_LIST_SIZE 100 // 배열의 최대크기
+
+typedef int element;
+typedef struct {
+	int list[MAX_LIST_SIZE];// 배열 정의
+	int length;// 현재 배열에 저장된 자료들의 개수
+} ArrayListType;
+
+// 오류 처리 함수
+void error(char* message)
+{
+	fprintf(stderr, "%s\n", message);
+	exit(1);
+}
+
+// 리스트 초기화
+void init(ArrayListType* L)
+{
+	L->length = 0;
+}
+
+// 리스트가 비어 있으면 1을 반환
+// 그렇지 않으면 0을 반환
+int is_empty(ArrayListType* L)
+{
+	return L->length == 0;
+}
+
+// 리스트가 가득 차 있으면 1을 반환
+// 그렇지 많으면 1을 반환
+int is_full(ArrayListType* L)
+{
+	return L->length == MAX_LIST_SIZE;
+}
+
+// 리스트 출력
+void display(ArrayListType* L)
+{
+	int i;
+	for (i = 0; i < L->length; i++)
+		printf("%d\n", L->list[i]);
+}
+// position: 삽입하고자 하는 위치
+// item: 삽입하고자 하는 자료
+void add(ArrayListType* L, int position, element item)
+{
+	if (!is_full(L) && (position >= 0) &&
+		(position <= L->length)) {
+		int i;
+		for (i = (L->length - 1); i >= position; i--)
+			L->list[i + 1] = L->list[i];
+		L->list[position] = item;
+		L->length++;
+	}
+}
+
+// position: 삭제하고자 하는 위치
+// 반환값: 삭제되는 자료
+// position: 삭제하고자 하는 위치
+// 반환값: 삭제되는 자료
+
+element delete(ArrayListType* L, int position) {
+	int i;
+	element item;
+	if (position < 0 || position >= L->length)
+		error("위치 오류");
+	item = L->list[position];
+	for (i = position; i < (L->length - 1); i++)
+		L->list[i] = L->list[i + 1];
+	L->length--;
+	return item;
+}
+
+int main() {
+	ArrayListType list1;
+	ArrayListType* plist;
+
+	// ListType를 정적으로 생성하고 ListType를 가리키는
+	// 포인터를 함수의 파라미터로 전달한다.
+	init(&list1);
+	add(&list1, 0, 10);
+	add(&list1, 0, 20);
+	add(&list1, 0, 30);
+	display(&list1);
+
+
+	// ListType를 동적으로 생성하고 ListType를 가리키는 
+	// 포인터를 함수의 파라미터로 전달한다.
+	plist = (ArrayListType*)malloc(sizeof(ArrayListType));
+	init(plist);
+	add(plist, 0, 10);
+	add(plist, 0, 20);
+	add(plist, 0, 30);
+	display(plist);
+	free(plist);
+	return 0;
+}
