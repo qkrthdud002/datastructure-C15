@@ -1,0 +1,208 @@
+//스택의 사용 예
+//-에디터에서 되돌리기 기능을 구현할 때
+//수행된 명령어들 중에서 가장 최근에 수행된 것부터 되돌리기를 해야하기 때문
+//-함수 호출에서 복귀 주소를 기억할 때
+//함수는 실행이 끝나면 가장 최근에 자신을 호출한 함수로 되돌아 가야한다.
+//즉, 함수가 호출된 순으로 스택에 현재 실행준인 문장의 다음번째 문장의 주소를
+//저장하고 하나의 함수가 끝나면 스택에서 복귀 주소를 구해서 그곳으로 되돌아간다.
+//이 경우 사용되는 스택을 컴퓨터의 운영체제만 사용하는 시스템스택으로 사용자는 접근할 수 없다.
+//함수가 호출 될 때마다 활성화 레코드가 시스템스택에 생성되며,
+//여기에 함수로부터 복귀에 실행 될 명령어의 주소인 프로그램 카운터값이 기록된다.
+//함수 호출 시 매개변수와 함수 안에서 선언된 지역 변수들도 함께 저장된다.
+
+//스택을 구현하는 방법
+//1. 배열을 이용하는 방법
+//장점 : 구현이 간단
+//단점 : 스택의 크기가 고정
+//2. 연결리스트를 이용하는 방법
+//장점 : 스택의 크기를 필요에 따라 가변적으로 변경 가능
+//단점 : 구현이 복잡
+//#include <stdio.h>
+//#define MAX_STACK_SIZE 100
+//typedef int element;
+//element stack[MAX_STACK_SIZE];
+//int top = -1;
+//공백 상태 검출 함수
+//int is_empty() {
+//	return (top == -1);
+//}
+//포화 상태 검출 함수
+//int is_full() {
+//	return(top == (MAX_STACK_SIZE - 1));
+//}
+//삽입함수
+//void push(element item) {
+//	if (is_full()) {
+//		fprintf(stderr, "스택 포화 에러\n");
+//		return;
+//	}
+//	else
+//		stack[++top] = item;
+//}
+//삭제 함수
+//element pop() {
+//	if (is_empty()) {
+//		fprintf(stderr, "스택 공백 에러\n");
+//		exit(1);
+//	}
+//	else
+//		return stack[top--];
+//}
+//피크 함수
+//element peek() {
+//	if (is_empty(s)) {
+//		fprintf(stderr, "스택 공백 에러\n");
+//		exit(1);
+//	}
+//	else
+//		return stack[top];
+//}
+//주 함수
+//void main() {
+//	push(1);
+//	push(2);
+//	push(3);
+//	printf("%d\n", pop());
+//	printf("%d\n", pop());
+//	printf("%d\n", pop());
+//	printf("%d\n", is_empty());
+//}
+
+//정수배열 스택프로그램
+//하나이상의 스택을 사용해야 할 때 곤란한 코드
+//전역 변수를 사용함으로써 프로그램을 복잡하게 만들어서 오류가 발생 될 가능성을 높힘.
+//#include <stdio.h>
+//#include <string.h>
+//#define MAX_STACK_SIZE 100
+//#define MAX_STRING 100
+//typedef struct {
+//	int student_no;
+//	char name[MAX_STRING];
+//	char address[MAX_STRING];
+//}element;
+//element stack[MAX_STACK_SIZE];
+//int top = -1;
+////공백 상태 검출 함수
+//int is_empty() {
+//	return
+//		(top == -1);
+//}
+//int is_full() {
+//	return
+//		(top == (MAX_STACK_SIZE - 1));
+//}
+////삽입함수
+//void push(element item) {
+//	if (is_full()) {
+//		fprintf(stderr, "스택 포화 에러\n");
+//		return;
+//	}
+//	else
+//		stack[++top] = item;
+//}
+////삭제함수
+//element pop() {
+//	if (is_empty()) {
+//		fprintf(stderr, "스택 공백 에러\n");
+//			exit(1);
+//	}
+//	else
+//		return stack[top--];
+//}
+////피크 함수
+//element peek() {
+//	if (is_empty(s)) {
+//		fprintf(stderr, "스택 공백 에러\n");
+//		exit(1);
+//	}
+//	else
+//		return stack[top];
+//}
+////주 함수
+//void main() {
+//	element ie, oe;
+//	strcpy(ie.name, "HonGilDong");
+//	strcpy(ie.address, "Seoul");
+//	ie.student_no = 20053001;
+//	push(ie);
+//	oe = pop();
+//	printf("name : %s\n", oe.name);
+//	printf("address : %s\n", oe.address);
+//	printf("student number : %d\n", oe.student_no);
+//}
+//
+////구조체 배열 스택프로그램
+////stack배열과 top이 전역변수로 선언되었기 때문에
+////전체 프로그램에서 여러개의 스택을 사용하기 어려움
+//#include <stdio.h>
+//#define MAX_STACK_SIZE 100
+//typedef int element;
+//typedef struct {
+//	element stack[MAX_STACK_SIZE];
+//	int top;
+//}StackType;
+////스택 초기화 함수
+//void init(StackType* s) {
+//	s->top = -1;
+//}
+////공백 상태 검출 함수
+//int is_empty(StackType* s) {
+//	return (s->top == -1);
+//}
+////포화 상태 검출 함수
+//int is_full(StackType* s) {
+//	return (s->top == (MAX_STACK_SIZE - 1));
+//}
+////삽입 함수
+//void push(element item) {
+//	if (is_full()) {
+//		fprintf(stderr, "스택 포화 에러\n");
+//		return;
+//	}
+//	else
+//		stack[++(s->top)] = item;
+//}
+////삭제 함수
+//element pop() {
+//	if (is_empty()) {
+//		fprintf(stderr, "스택 공백 에러\n");
+//		exit(1);
+//	}
+//	else
+//		return stack[top--];
+//}//다시보기(수정)
+////피크 함수
+//element peek() {
+//	if (is_empty(s)) {
+//		fprintf(stderr, "스택 공백 에러\n");
+//		exit(1);
+//	}
+//	else return stack[top];
+//} //다시보기(수정)
+////주 함수
+//void main() {
+//	push(% s, 1);
+//	push(% s, 2);
+//	push(% s, 3);
+//	printf("%d\n", pop(&s));
+//	printf("%d\n", pop(&s));
+//	printf("%d\n", pop(&s));
+//	printf("%d\n", is_empty(&s));
+//}
+
+//일반적인 배열 스택프로그램
+//stacktype이라는 새로운 구조체 타입을 만들고 stack배열과 top을 넣고,
+//구조체 포인터를 각 함수의 매개변수로 전달한다.
+//즉, top과 stack배열을 하나의 구조체로 결합시켜 구조체의 포인터를 함수의 매개변수로 전달한다.
+//예를 들어 모든 함수에서 전달된 구조체 포인터가 s인 경우, 기존에 top이라고
+//사용하던 것을 s->top으로 변경하면 된다.
+//필요할 때마다 stacktype의 구조체를 만들면 된다.
+//여러개의 스택을 만드는 것이 가능한 장점이 있다.
+//-stacktype구조체 안에 들어있는 변수들을 초기화 하기 위한 init함수가 필요하다.
+//배열에 어떤 값이 존재하더라도 top의 값만 -1로 하면 스택은 비어있는 것으로 간주한다.
+//C언어에서의 함수 매개변수 전달 방식이 기본적으로 값에 의한 전달방식이기 때문에
+//구조체를 함수의 매개변수로 전달하였을 경우 구조체의 원본이 전달되는 것이 아니라
+//복사본이 함수에 전달된다. 따라서 함수 안에는 복사본을 수정하여도 원본에는 영향을 주지 못한다.
+//그러나 원본에 대한 포인터를 전달하면 원본을 변경할 수 있다.
+//스택의 상태를 변경하지 않는 is_empty, is_full, peek함수에서는 구조체
+//복사본을 함수에 전달할 수 있다. 하지만 구조체 복사에 따른 부담이 고려되어야 한다.
